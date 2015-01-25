@@ -347,7 +347,10 @@ define([
             setTimeout(function () {
                 that.carry_on_completion();
             }, 50);
-        } else if (code == keycodes.up || code == keycodes.down) {
+        } else if (code == keycodes.up ||
+                   code == keycodes.down ||
+                   (event.ctrlKey && code == keycodes.n) ||
+                   (event.ctrlKey && code == keycodes.p) ) {
             // need to do that to be able to move the arrow
             // when on the first or last line ofo a code cell
             event.codemirrorIgnore = true;
@@ -356,10 +359,10 @@ define([
 
             var options = this.sel.find('option');
             var index = this.sel[0].selectedIndex;
-            if (code == keycodes.up) {
+            if (code == keycodes.up || (event.ctrlKey && code == keycodes.p) ) {
                 index--;
             }
-            if (code == keycodes.down) {
+            if (code == keycodes.down || (event.ctrlKey && code == keycodes.n) ) {
                 index++;
             }
             index = Math.min(Math.max(index, 0), options.length-1);
@@ -389,17 +392,17 @@ define([
          * before events were disconnected and CodeMirror stopped
          * receiving events while the completer is focused.
          */
-        
+
         var that = this;
         var code = event.keyCode;
-        
+
         // don't handle keypress if it's not a character (arrows on FF)
         // or ENTER/TAB
         if (event.charCode === 0 ||
             code == keycodes.tab ||
             code == keycodes.enter
         ) return;
-        
+
         this.close();
         this.editor.focus();
         setTimeout(function () {
